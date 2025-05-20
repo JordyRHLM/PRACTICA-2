@@ -46,13 +46,13 @@ springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.swagger-ui.tagsSorter=alpha
 springdoc.swagger-ui.operationsSorter=alpha
 springdoc.swagger-ui.filter=true
-🔐 Autenticación y Roles
+#🔐 Autenticación y Roles
 Roles del sistema
 Rol	Descripción
 Administrador	Acceso completo al sistema. Gestiona usuarios y roles.
 Docente	Visualiza estudiantes inscritos y puede participar en evaluaciones.
 Estudiante	Puede inscribirse en materias y ver su información académica.
-Acceso a Endpoints
+#Acceso a Endpoints
 🔓 Públicos (sin autenticación)
 /swagger-ui/** - Interfaz Swagger UI
 
