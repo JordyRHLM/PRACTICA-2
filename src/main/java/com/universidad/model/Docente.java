@@ -1,31 +1,84 @@
 package com.universidad.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-@Data
+/**
+ * Entidad JPA que representa a un docente en el sistema universitario.
+ * Hereda los atributos comunes de la clase Persona.
+ * Incluye información de identificación, contacto, estado y control de auditoría.
+ */
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "docente") // Nombre de la tabla en la base de datos  
+@Table(name = "docente")
 public class Docente extends Persona {
-    @Column(name = "nro_empleado", nullable = false, unique = true) // Columna no nula y con valor único    
+
+    /**
+     * Número de empleado del docente, único en el sistema.
+     */
+    @Column(name = "nro_empleado", nullable = false, unique = true, length = 20)
     private String nroEmpleado;
 
-    @Column(name = "departamento", nullable = false) // Columna no nula
+    /**
+     * Departamento al que pertenece el docente.
+     */
+    @Column(name = "departamento", nullable = false, length = 50)
     private String departamento;
 
     /**
-     * Lista de evaluaciones asociadas al docente.
+     * Estado actual del docente (activo o inactivo).
      */
-    @OneToMany(mappedBy = "docente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EvaluacionDocente> evaluaciones; // Lista de evaluaciones asociadas al docente
+    @Column(name = "estado", nullable = false, length = 20)
+    private String estado;
+
+    /**
+     * Usuario que dio de alta al docente.
+     */
+    @Column(name = "usuario_alta", nullable = false, length = 50)
+    private String usuarioAlta;
+
+    /**
+     * Fecha en la que se dio de alta al docente.
+     */
+    @Column(name = "fecha_alta", nullable = false)
+    private LocalDate fechaAlta;
+
+    /**
+     * Usuario que modificó los datos del docente.
+     */
+    @Column(name = "usuario_modificacion", length = 50)
+    private String usuarioModificacion;
+
+    /**
+     * Fecha en la que se modificó al docente.
+     */
+    @Column(name = "fecha_modificacion")
+    private LocalDate fechaModificacion;
+
+    /**
+     * Usuario que dio de baja al docente.
+     */
+    @Column(name = "usuario_baja", length = 50)
+    private String usuarioBaja;
+
+    /**
+     * Fecha en la que se dio de baja al docente.
+     */
+    @Column(name = "fecha_baja")
+    private LocalDate fechaBaja;
+
+    /**
+     * Motivo de baja del docente (renuncia, jubilacion o despido).
+     */
+    @Column(name = "motivo_baja", length = 100)
+    private String motivoBaja;
+
 }

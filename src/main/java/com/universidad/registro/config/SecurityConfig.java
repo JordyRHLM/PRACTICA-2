@@ -53,7 +53,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     /**
      * Este bean se encarga de gestionar la autenticación mediante JWT (JSON Web Token).
      * Se utiliza para validar y procesar los tokens JWT en las solicitudes de los usuarios.
@@ -70,19 +69,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.disable())
-            .csrf(csrf -> csrf.disable())
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(cors -> cors.disable())  // Deshabilitar CORS
+            .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))  // Manejo de excepciones
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Política de sesión sin estado
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/public/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                // Permitir acceso a Swagger sin autenticación
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                // Otras rutas protegidas por roles
+                .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/docentes/**").hasAnyRole("ADMIN", "DOCENTE")
                 .requestMatchers("/api/estudiantes/**").hasAnyRole("ADMIN", "DOCENTE", "ESTUDIANTE")
-                .anyRequest().authenticated()
+                .requestMatchers("/api/inscripciones/**").hasAnyRole("ADMIN", "DOCENTE")
+                .requestMatchers("/api/materias/**").hasAnyRole("ADMIN", "DOCENTE", "ESTUDIANTE")
+                .anyRequest().authenticated()  // Resto de las rutas deben estar autenticadas
             );
 
-        // Usar el bean jwtAuthenticationFilter directamente
+        // Añadir el filtro JWT para manejar la autenticación
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

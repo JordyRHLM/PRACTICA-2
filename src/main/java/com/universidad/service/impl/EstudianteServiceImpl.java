@@ -63,16 +63,6 @@ public class EstudianteServiceImpl implements IEstudianteService { // Define la 
                 .collect(Collectors.toList()); // Recoge los resultados en una lista
     }
 
-
-    @Override
-    @Cacheable(value = "materiasEstudiante", key = "#estudianteId")
-    public List<Materia> obtenerMateriasDeEstudiante(Long estudianteId) { // Método para obtener las materias de un estudiante por su ID
-        // Busca el estudiante por su ID y obtiene sus materias
-        Estudiante estudiante = estudianteRepository.findById(estudianteId)
-                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
-        return estudiante.getMaterias();
-    }
-
     @Override
     @CachePut(value = "estudiante", key = "#result.numeroInscripcion")
     @CacheEvict(value = {"estudiantes", "estudiantesActivos"}, allEntries = true)
@@ -120,13 +110,9 @@ public class EstudianteServiceImpl implements IEstudianteService { // Define la 
     }
 
     @Transactional
-    public Estudiante obtenerEstudianteConBloqueo(Long id) {
+    public Estudiante obtenerEstudiantePorId(Long id) {
         Estudiante est = estudianteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
-        // Simula un tiempo de procesamiento prolongado
-        // Esto es solo para demostrar el bloqueo, en un caso real no se debería hacer esto
-            try { Thread.sleep(15000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-        // Simula un tiempo de procesamiento prolongado
         return est;
     }
 

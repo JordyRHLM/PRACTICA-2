@@ -29,8 +29,8 @@ public abstract class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Generación automática del ID
     private Long id;
 
-    @Version
-    private Long version; // Campo para manejar la versión de la entidad, útil para el control de concurrencia
+    //@Version
+   // private Long version = 0L; // Campo para manejar la versión de la entidad, útil para el control de concurrencia
 
     @Column(nullable = false, length = 50) // Columna no nula con longitud máxima de 50 caracteres
     // El nombre de la persona no puede ser nulo y tiene una longitud máxima de 50 caracteres

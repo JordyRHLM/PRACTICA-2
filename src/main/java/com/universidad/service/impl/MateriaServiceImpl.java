@@ -1,6 +1,8 @@
 package com.universidad.service.impl;
 
+import com.universidad.model.Docente;
 import com.universidad.model.Materia;
+import com.universidad.repository.DocenteRepository;
 import com.universidad.repository.MateriaRepository;
 import com.universidad.service.IMateriaService;
 import com.universidad.dto.MateriaDTO;
@@ -19,18 +21,25 @@ public class MateriaServiceImpl implements IMateriaService {
     @Autowired
     private MateriaRepository materiaRepository;
 
+    @Autowired
+    private DocenteRepository docenteRepository;
+
     // Método utilitario para mapear Materia a MateriaDTO
     private MateriaDTO mapToDTO(Materia materia) {
-        if (materia == null) return null;
+        if (materia == null)
+            return null;
         return MateriaDTO.builder()
                 .id(materia.getId())
                 .nombreMateria(materia.getNombreMateria())
                 .codigoUnico(materia.getCodigoUnico())
                 .creditos(materia.getCreditos())
-                .prerequisitos(materia.getPrerequisitos() != null ?
-                    materia.getPrerequisitos().stream().map(Materia::getId).collect(Collectors.toList()) : null)
-                .esPrerequisitoDe(materia.getEsPrerequisitoDe() != null ?
-                    materia.getEsPrerequisitoDe().stream().map(Materia::getId).collect(Collectors.toList()) : null)
+                .prerequisitos(materia.getPrerequisitos() != null
+                        ? materia.getPrerequisitos().stream().map(Materia::getId).collect(Collectors.toList())
+                        : null)
+                .esPrerequisitoDe(materia.getEsPrerequisitoDe() != null
+                        ? materia.getEsPrerequisitoDe().stream().map(Materia::getId).collect(Collectors.toList())
+                        : null)
+                .docenteId(materia.getDocente() != null ? materia.getDocente().getId() : null)
                 .build();
     }
 
@@ -61,7 +70,16 @@ public class MateriaServiceImpl implements IMateriaService {
         materia.setNombreMateria(materiaDTO.getNombreMateria());
         materia.setCodigoUnico(materiaDTO.getCodigoUnico());
         materia.setCreditos(materiaDTO.getCreditos());
-        // Map other fields as necessary
+        // Setear prerequisitos
+        if (materiaDTO.getPrerequisitos() != null) {
+            List<Materia> prerequisitos = materiaRepository.findAllById(materiaDTO.getPrerequisitos());
+            materia.setPrerequisitos(prerequisitos);
+        }
+        // Setear esPrerequisitoDe
+        if (materiaDTO.getEsPrerequisitoDe() != null) {
+            List<Materia> esPrerequisitoDe = materiaRepository.findAllById(materiaDTO.getEsPrerequisitoDe());
+            materia.setEsPrerequisitoDe(esPrerequisitoDe);
+        }
         Materia savedMateria = materiaRepository.save(materia);
         return mapToDTO(savedMateria);
     }
@@ -70,17 +88,47 @@ public class MateriaServiceImpl implements IMateriaService {
     @CachePut(value = "materia", key = "#id")
     @CacheEvict(value = "materias", allEntries = true)
     public MateriaDTO actualizarMateria(Long id, MateriaDTO materiaDTO) {
-        Materia materia = materiaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Materia not found"));
+        Materia materia = materiaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Materia not found"));
         materia.setNombreMateria(materiaDTO.getNombreMateria());
         materia.setCodigoUnico(materiaDTO.getCodigoUnico());
         materia.setCreditos(materiaDTO.getCreditos());
-        // Map other fields as necessary
+
+        // Setear prerequisitos
+        if (materiaDTO.getPrerequisitos() != null) {
+            List<Materia> prerequisitos = materiaRepository.findAllById(materiaDTO.getPrerequisitos());
+            materia.setPrerequisitos(prerequisitos);
+        } else {
+            materia.setPrerequisitos(null);
+        }
+
+        // Setear esPrerequisitoDe
+        if (materiaDTO.getEsPrerequisitoDe() != null) {
+            List<Materia> esPrerequisitoDe = materiaRepository.findAllById(materiaDTO.getEsPrerequisitoDe());
+            materia.setEsPrerequisitoDe(esPrerequisitoDe);
+        } else {
+            materia.setEsPrerequisitoDe(null);
+        }
+        
         Materia updatedMateria = materiaRepository.save(materia);
         return mapToDTO(updatedMateria);
     }
 
     @Override
-    @CacheEvict(value = {"materia", "materias"}, allEntries = true)
+    @CachePut(value = "materia", key = "#id")
+    @CacheEvict(value = "materias", allEntries = true)
+    public MateriaDTO asignarDocente(Long id, Long docenteId) {
+        Materia materia = materiaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Materia no encontrada"));
+        Docente docente = docenteRepository.findById(docenteId)
+                .orElseThrow(() -> new IllegalArgumentException("Docente no encontrado"));
+        materia.setDocente(docente);
+        Materia updatedMateria = materiaRepository.save(materia);
+        return mapToDTO(updatedMateria);
+    }
+
+    @Override
+    @CacheEvict(value = { "materia", "materias" }, allEntries = true)
     public void eliminarMateria(Long id) {
         materiaRepository.deleteById(id);
     }

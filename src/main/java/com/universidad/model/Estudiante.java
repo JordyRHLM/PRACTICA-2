@@ -92,15 +92,6 @@ public class Estudiante extends Persona { // Define la clase Estudiante que exti
     @Column(name = "motivo_baja") // Columna opcional
     private String motivoBaja; // Columna opcional para almacenar el motivo de baja del estudiante
 
-    /**
-     * Lista de materias asociadas al estudiante.
-     */
-    @ManyToMany(fetch = FetchType.LAZY) // Relación muchos a muchos con la entidad Materia
-    @JoinTable(name = "estudiante_materia", // Nombre de la tabla intermedia
-            joinColumns = @JoinColumn(name = "id_estudiante"), // Columna que referencia al estudiante
-            inverseJoinColumns = @JoinColumn(name = "id_materia")  // Columna que referencia a la materia 
-    )
-    private List<Materia> materias; // Lista de materias asociadas al estudiante
 
     /*@Version
     private Long version; // Campo para manejar la versión de la entidad, útil para el control de concurrencia*/

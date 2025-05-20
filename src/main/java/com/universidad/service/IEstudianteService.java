@@ -2,7 +2,6 @@ package com.universidad.service; // Define el paquete al que pertenece esta inte
 
 import com.universidad.dto.EstudianteDTO; // Importa la clase EstudianteDTO del paquete dto
 import com.universidad.model.Estudiante;
-import com.universidad.model.Materia;
 
 import java.util.List; // Importa la interfaz List para manejar listas
 
@@ -29,14 +28,6 @@ public interface IEstudianteService { // Define la interfaz IEstudianteService
      */
     EstudianteDTO obtenerEstudiantePorNumeroInscripcion(String numeroInscripcion); // Método para obtener un estudiante por su número de inscripción
 
-    /**
-     * Obtiene las materias de un estudiante por su ID.
-     * @param estudianteId ID del estudiante.
-     * @return Lista de materias del estudiante.
-     */
-    public List<Materia> obtenerMateriasDeEstudiante(Long estudianteId); // Método para obtener las materias de un estudiante por su ID
-
-    
     /**
      * Crea un nuevo estudiante.
      * @param estudianteDTO DTO del estudiante a crear.
@@ -66,5 +57,5 @@ public interface IEstudianteService { // Define la interfaz IEstudianteService
      * @throws RuntimeException si el estudiante no se encuentra
      * @return
      */
-    Estudiante obtenerEstudianteConBloqueo(Long id); // Método para obtener un estudiante por su ID con bloqueo pesimista
+    Estudiante obtenerEstudiantePorId(Long id); // Método para obtener un estudiante por su ID con bloqueo pesimista
 }

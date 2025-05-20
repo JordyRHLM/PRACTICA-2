@@ -1,7 +1,6 @@
 package com.universidad.controller; // Define el paquete al que pertenece esta clase
 
 import com.universidad.dto.EstudianteDTO; // Importa la clase EstudianteDTO del paquete dto
-import com.universidad.model.Materia;
 import com.universidad.model.Estudiante;
 import com.universidad.service.IEstudianteService; // Importa la interfaz IEstudianteService del paquete service
 
@@ -52,17 +51,10 @@ public class EstudianteController { // Define la clase EstudianteController
         return ResponseEntity.ok(estudiante); // Retorna una respuesta HTTP 200 OK con el estudiante encontrado
     }
 
-    @GetMapping("/{id}/materias")
-    public ResponseEntity<List<Materia>> obtenerMateriasDeEstudiante(
-        @PathVariable("id") Long estudianteId) {
-        List<Materia> materias = estudianteService.obtenerMateriasDeEstudiante(estudianteId);
-        return ResponseEntity.ok(materias);
-    }
-
-    @GetMapping("/{id}/lock")
-    public ResponseEntity<Estudiante> getEstudianteConBloqueo(
+    @GetMapping("/{id}")
+    public ResponseEntity<Estudiante> getEstudiantePorId(
         @PathVariable Long id) {
-        Estudiante estudiante = estudianteService.obtenerEstudianteConBloqueo(id);
+        Estudiante estudiante = estudianteService.obtenerEstudiantePorId(id);
         return ResponseEntity.ok(estudiante);
     }
 
