@@ -75,4 +75,4 @@ Acceso a Endpoints
 👨‍🎓 ADMIN, DOCENTE y ESTUDIANTE
 /api/estudiantes/** - Información de estudiantes
 
-/api/materias/** - Consulta de materias (creación solo ADMIN)
+/api/materias/** - Consulta de materias 
