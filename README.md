@@ -1,6 +1,6 @@
 Sistema de Registro Universitario - API REST
 📌 Descripción
-API REST para el sistema de registro universitario con autenticación JWT y control de acceso basado en roles. 
+API REST para el sistema de registro universitario con autenticación JWT y control de acceso basado en roles. Documentada con Swagger/OpenAPI.
 
 🛠 Tecnologías
 Spring Boot 3.4.3
@@ -46,13 +46,13 @@ springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.swagger-ui.tagsSorter=alpha
 springdoc.swagger-ui.operationsSorter=alpha
 springdoc.swagger-ui.filter=true
-#🔐 Autenticación y Roles
+🔐 Autenticación y Roles
 Roles del sistema
 Rol	Descripción
 Administrador	Acceso completo al sistema. Gestiona usuarios y roles.
 Docente	Visualiza estudiantes inscritos y puede participar en evaluaciones.
 Estudiante	Puede inscribirse en materias y ver su información académica.
-#Acceso a Endpoints
+Acceso a Endpoints
 🔓 Públicos (sin autenticación)
 /swagger-ui/** - Interfaz Swagger UI
 
@@ -75,9 +75,15 @@ Estudiante	Puede inscribirse en materias y ver su información académica.
 
 /api/materias/** - Consulta de materias (creación solo ADMIN)
 
+🚀 Inicio Rápido
+Configura la base de datos:
+
+sql
+CREATE DATABASE universidad;
+Ejecuta la aplicación:
+
 bash
 mvn spring-boot:run
-
 Accede a la documentación:
 
 Interfaz Swagger UI: http://localhost:8086/swagger-ui.html
